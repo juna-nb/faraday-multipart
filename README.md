@@ -7,15 +7,15 @@
 The `Multipart` middleware converts a `Faraday::Request#body` Hash of key/value pairs into a multipart form request, but
 only under these conditions:
 
-* The request's Content-Type is "multipart/form-data"
-* Content-Type is unspecified, AND one of the values in the Body responds to
+- The request's Content-Type is "multipart/form-data"
+- Content-Type is unspecified, AND one of the values in the Body responds to
   `#content_type`.
 
 Faraday contains a couple helper classes for multipart values:
 
-* `Faraday::Multipart::FilePart` wraps binary file data with a Content-Type. The file data can be specified with a String path to a
+- `Faraday::Multipart::FilePart` wraps binary file data with a Content-Type. The file data can be specified with a String path to a
   local file, or an IO object.
-* `Faraday::Multipart::ParamPart` wraps a String value with a Content-Type, and optionally a Content-ID.
+- `Faraday::Multipart::ParamPart` wraps a String value with a Content-Type, and optionally a Content-ID.
 
 ## Installation
 
@@ -51,6 +51,18 @@ conn = Faraday.new(...) do |f|
 end
 ```
 
+If you need to [specify a different content type for the multipart
+request](https://www.iana.org/assignments/media-types/media-types.xhtml#multipart),
+you can do so by providing the `content_type` option but it must start with
+`multipart/`
+otherwise it will default to `multipart/form-data`:
+
+```ruby
+conn = Faraday.new(...) do |f|
+  f.request :multipart, content_type: 'multipart/mixed'
+  # ...
+end
+```
 
 Payload can be a mix of POST data and multipart values.
 
